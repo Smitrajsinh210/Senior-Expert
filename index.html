@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Senior Expert Mock Test</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 30px;
+      background-color: #ffffff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+    }
+    h1 {
+      text-align: center;
+      color: #00796b;
+      margin-bottom: 30px;
+    }
+    .question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .options button {
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s, border-color 0.3s;
+      background-color: #fafafa;
+    }
+    .options button:hover {
+      border-color: #26a69a;
+      background-color: #e0f2f1;
+    }
+    .options button.selected {
+      background-color: #b2dfdb;
+      border-color: #009688;
+    }
+    .next-btn {
+      margin-top: 30px;
+      padding: 12px 25px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+    .next-btn:hover {
+      background-color: #004d40;
+    }
+    .score {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Senior ExpertMock Test</h1>
+    <div id="quiz"></div>
+  </div>
+
+  <script>
+    // First 50 MCQs from document (simplified format)
+    const questions = [
+      { question: "What is the SI unit of electric potential?", options: ["Newton", "Coulomb", "Joule", "Volt"], answer: 3 },
+      { question: "Electric potential at a point is defined as:", options: ["Force per unit charge", "Work done to bring a unit positive charge from infinity", "Electric field strength", "Energy stored in a charge"], answer: 1 },
+      { question: "Which of the following is a scalar quantity?", options: ["Electric field", "Magnetic field", "Electric potential", "Current"], answer: 2 },
+      { question: "The electric potential at a point due to a positive point charge is:", options: ["Negative", "Zero", "Positive", "Imaginary"], answer: 2 },
+      { question: "Which device measures electric potential difference?", options: ["Ammeter", "Galvanometer", "Voltmeter", "Ohmmeter"], answer: 2 },
+      { question: "The electric potential at infinity is usually considered as:", options: ["Zero", "Infinite", "One", "Negative"], answer: 0 },
+      { question: "If work done in moving a 2 C charge is 10 J, the potential difference is:", options: ["5 V", "2 V", "10 V", "20 V"], answer: 0 },
+      { question: "Electric potential inside a conductor is:", options: ["Zero", "Constant", "Maximum at center", "Equal to surface potential"], answer: 1 },
+      { question: "Equipotential surfaces are always:", options: ["Parallel to electric field lines", "Perpendicular to electric field lines", "Circular", "Infinite"], answer: 1 },
+      { question: "Work done in moving a charge along an equipotential surface is:", options: ["Maximum", "Minimum", "Infinite", "Zero"], answer: 3 },
+      { question: "What happens to electric potential as you move away from a positive point charge?", options: ["Increases", "Decreases", "Stays constant", "Becomes infinite"], answer: 1 },
+      { question: "What is the potential difference across a 10 Ω resistor carrying 2 A current?", options: ["10 V", "20 V", "5 V", "15 V"], answer: 1 },
+      { question: "Potential due to a negative charge is:", options: ["Positive", "Zero", "Negative", "Undefined"], answer: 2 },
+      { question: "Electric potential is related to electric field by:", options: ["E = dV/dr", "E = V²/r", "E = V/d", "E = -dV/dr"], answer: 3 },
+      { question: "A positive charge moves from lower to higher potential. Work done is:", options: ["Positive", "Negative", "Zero", "Infinite"], answer: 1 },
+      { question: "The unit of electric potential is equivalent to:", options: ["J/C", "N/m", "C/m", "V·m"], answer: 0 },
+      { question: "What is the potential at the center of a uniformly charged spherical shell?", options: ["Maximum", "Zero", "Same as surface", "Infinite"], answer: 2 },
+      { question: "Which of these is NOT a unit of electric potential?", options: ["Volt", "Joule/Coulomb", "N/C", "m²/s²"], answer: 2 },
+      { question: "Electric potential is created by:", options: ["Electric field", "Magnetic field", "Charge distribution", "Resistance"], answer: 2 },
+      { question: "Electric field lines start from:", options: ["Negative charges", "Ground", "Neutral points", "Positive charges"], answer: 3 },
+      { question: "Potential at a point due to a dipole on its axial line is:", options: ["Zero", "Positive", "Negative", "Depends on position"], answer: 3 },
+      { question: "Which of these best describes electric potential energy?", options: ["Energy of motion", "Stored energy due to position", "Random energy", "Kinetic energy"], answer: 1 },
+      { question: "In electrostatics, potential is defined as:", options: ["Energy of a field", "Work done to place a test charge", "Resistance in the circuit", "Voltage in a wire"], answer: 1 },
+      { question: "If two like charges are brought closer, the potential energy:", options: ["Increases", "Decreases", "Remains the same", "Becomes zero"], answer: 0 },
+      { question: "What is the potential difference between two points A and B when work done is zero?", options: ["Maximum", "Negative", "Zero", "Infinite"], answer: 2 },
+      { question: "Electric potential at a point is directly proportional to:", options: ["Distance from charge", "Charge", "Square of distance", "Resistance"], answer: 1 },
+      { question: "The gradient of potential gives:", options: ["Capacitance", "Resistance", "Electric field", "Voltage"], answer: 2 },
+      { question: "Potential due to a system of charges is:", options: ["Algebraic sum of individual potentials", "Vector sum of electric fields", "Square root of total energy", "Always zero"], answer: 0 },
+      { question: "The term “potential difference” means:", options: ["Current difference", "Voltage between two points", "Resistance change", "Work reduction"], answer: 1 },
+      { question: "Unit of electric field × distance is:", options: ["Newton", "Volt", "Joule", "Coulomb"], answer: 1 },
+      { question: "Which condition must be met for electrostatic equilibrium?", options: ["Electric field is maximum", "Potential is constant throughout", "Charges flow freely", "Temperature is constant"], answer: 1 },
+      { question: "A 3 C charge at 12 V potential has potential energy:", options: ["36 J", "15 J", "9 J", "4 J"], answer: 0 },
+      { question: "Potential at midpoint of two equal like charges is:", options: ["Zero", "Infinite", "Equal to one charge", "Greater than each charge"], answer: 3 },
+      { question: "Electric potential in vacuum depends on:", options: ["Charge and distance", "Mass", "Current", "Time"], answer: 0 },
+      { question: "A test charge placed in an electric field experiences:", options: ["Voltage", "Force", "Resistance", "Current"], answer: 1 },
+      { question: "The potential difference across a resistor depends on:", options: ["Capacitance", "Inductance", "Resistance and current", "Length of wire only"], answer: 2 },
+      { question: "The electric potential is a:", options: ["Vector quantity", "Scalar quantity", "Tensor quantity", "Imaginary number"], answer: 1 },
+      { question: "Which equation is used to calculate electric potential energy?", options: ["U = qV", "V = IR", "F = qE", "V = dE"], answer: 0 },
+      { question: "If a point is at zero potential, then:", options: ["It must be at infinity", "No charge is present", "Electric field is also zero", "Nothing definite can be said"], answer: 3 },
+      { question: "Potential due to two equal and opposite charges at the midpoint is:", options: ["Zero", "Infinite", "Equal to one charge", "None"], answer: 0 },
+      { question: "Electric potential energy between charges q₁ and q₂ is:", options: ["Directly proportional to distance", "Inversely proportional to distance", "Independent of distance", "Zero"], answer: 1 },
+      { question: "The work required to assemble a charge configuration is:", options: ["Kinetic energy", "Electric potential energy", "Capacitance", "Voltage"], answer: 1 },
+      { question: "What is the potential of Earth taken as?", options: ["+1", "0", "∞", "-1"], answer: 1 },
+      { question: "A potential of 1 Volt means:", options: ["1 J of work per 1 C", "1 N/C", "1 W per Amp", "1 Ω"], answer: 0 },
+      { question: "Work done in bringing a charge from infinity to a point is equal to:", options: ["Potential at that point", "Electric field strength", "Charge at that point", "None"], answer: 0 },
+      { question: "Potential energy is positive when:", options: ["Like charges are together", "Unlike charges are together", "Charges are neutral", "Always zero"], answer: 0 },
+      { question: "Electric potential near a dipole is:", options: ["Uniform", "Varies with angle", "Constant", "Zero"], answer: 1 },
+      { question: "If electric field is uniform, potential difference is:", options: ["Linear with distance", "Constant", "Zero", "Exponential"], answer: 0 },
+      { question: "When a positive test charge is moved opposite to the electric field, potential energy:", options: ["Increases", "Decreases", "Remains constant", "Becomes zero"], answer: 0 },
+      { question: "Electric potential is highest:", options: ["Near positive charge", "Far from charge", "Midpoint between two equal charges", "At Earth’s surface"], answer: 0 },
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let selectedOptionIndex = null;
+
+    function showQuestion() {
+      const quiz = document.getElementById("quiz");
+      const q = questions[currentQuestion];
+
+      let optionsHTML = q.options.map((opt, idx) => `
+        <button class="option" onclick="selectOption(this, ${idx})">${opt}</button>
+      `).join("");
+
+      quiz.innerHTML = `
+        <div class="question">Q${currentQuestion + 1}. ${q.question}</div>
+        <div class="options">${optionsHTML}</div>
+        <button class="next-btn" onclick="nextQuestion()">
+          ${currentQuestion < questions.length - 1 ? "Next" : "Submit"}
+        </button>
+      `;
+    }
+
+    function selectOption(button, index) {
+      const buttons = document.querySelectorAll(".option");
+      buttons.forEach((btn) => btn.classList.remove("selected"));
+      button.classList.add("selected");
+      selectedOptionIndex = index;
+    }
+
+    function nextQuestion() {
+      const correctIndex = questions[currentQuestion].answer;
+      if (selectedOptionIndex === correctIndex) {
+        score += 1;
+      } else if (selectedOptionIndex !== null) {
+        score -= 0.25;
+      }
+      selectedOptionIndex = null;
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        showScore();
+      }
+    }
+
+    function showScore() {
+      const quiz = document.getElementById("quiz");
+      const finalScore = Math.max(score, 0).toFixed(2);
+      quiz.innerHTML = `<div class="score">Your Score: ${finalScore} / ${questions.length}</div>`;
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
