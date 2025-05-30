@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mock Test</title>
+  <title>Senior Expert Mock Test</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -214,58 +214,82 @@
 ];
 
     let currentQuestion = 0;
-    let score = 0;
-    let selectedOption = null;
+  let score = 0;
+  let selectedOption = null;
+  let wrongAnswers = [];
 
-    const questionText = document.getElementById("questionText");
-    const optionButtons = document.getElementById("optionButtons");
-    const nextBtn = document.getElementById("nextBtn");
-    const scoreDisplay = document.getElementById("scoreDisplay");
+  const questionText = document.getElementById("questionText");
+  const optionButtons = document.getElementById("optionButtons");
+  const nextBtn = document.getElementById("nextBtn");
+  const scoreDisplay = document.getElementById("scoreDisplay");
 
-    function showQuestion(index) {
-      const q = questions[index];
-      questionText.textContent = q.question;
-      optionButtons.innerHTML = "";
-      selectedOption = null;
+  function showQuestion(index) {
+    const q = questions[index];
+    questionText.textContent = `Q${index + 1}. ${q.question}`;
+    optionButtons.innerHTML = "";
+    selectedOption = null;
 
-      q.options.forEach((option, i) => {
-        const button = document.createElement("button");
-        button.textContent = option;
-        button.addEventListener("click", () => selectOption(button, i));
-        optionButtons.appendChild(button);
+    q.options.forEach((option, i) => {
+      const button = document.createElement("button");
+      button.textContent = option;
+      button.addEventListener("click", () => selectOption(button, i));
+      optionButtons.appendChild(button);
+    });
+  }
+
+  function selectOption(button, index) {
+    Array.from(optionButtons.children).forEach(btn => btn.classList.remove("selected"));
+    button.classList.add("selected");
+    selectedOption = index;
+  }
+
+  nextBtn.addEventListener("click", () => {
+    const current = questions[currentQuestion];
+
+    if (selectedOption === current.answer) {
+      score++;
+    } else if (selectedOption !== null || selectedOption === null) {
+      wrongAnswers.push({
+        question: current.question,
+        selected: selectedOption !== null ? current.options[selectedOption] : "Skipped",
+        correct: current.options[current.answer]
       });
     }
 
-    function selectOption(button, index) {
-      Array.from(optionButtons.children).forEach(btn => btn.classList.remove("selected"));
-      button.classList.add("selected");
-      selectedOption = index;
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+      showQuestion(currentQuestion);
+    } else {
+      showResults();
     }
+  });
 
-    nextBtn.addEventListener("click", () => {
-      if (selectedOption === null) {
-        alert("Please select an answer before proceeding.");
-        return;
-      }
+  function showResults() {
+    questionText.style.display = "none";
+    optionButtons.style.display = "none";
+    nextBtn.style.display = "none";
 
-      if (selectedOption === questions[currentQuestion].answer) {
-        score++;
-      }
+    scoreDisplay.style.display = "block";
+    scoreDisplay.innerHTML = `
+      <div>You scored ${score} out of ${questions.length}</div>
+      <hr style="margin: 20px 0;">
+      <div><strong>Review Incorrect / Skipped Questions:</strong></div>
+      <ul style="margin-top: 10px;">
+        ${wrongAnswers.map((item, i) => `
+          <li style="margin-bottom: 10px;">
+            <strong>Q${i + 1}:</strong> ${item.question}<br/>
+            <span style="color: red;">Your Answer:</span> ${item.selected}<br/>
+            <span style="color: green;">Correct Answer:</span> ${item.correct}
+          </li>
+        `).join('')}
+      </ul>
+    `;
+  }
 
-      currentQuestion++;
+  showQuestion(currentQuestion);
+</script>
 
-      if (currentQuestion < questions.length) {
-        showQuestion(currentQuestion);
-      } else {
-        questionText.style.display = "none";
-        optionButtons.style.display = "none";
-        nextBtn.style.display = "none";
-        scoreDisplay.style.display = "block";
-        scoreDisplay.textContent = `You scored ${score} out of ${questions.length}`;
-      }
-    });
-
-    showQuestion(currentQuestion);
   </script>
 </body>
 </html>
